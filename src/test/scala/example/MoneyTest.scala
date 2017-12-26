@@ -13,6 +13,8 @@ class MoneyTest extends FlatSpec with Matchers {
   "$5" should "be $5" in {
     Dollar(5) shouldEqual Dollar(5)
     Dollar(5) should not be Dollar(6)
+    Franc(5) shouldEqual Franc(5)
+    Franc(5) should not be Franc(6)
   }
 
   "5 CHF * N times" should "be 5 CHF * N" in {
