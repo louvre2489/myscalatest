@@ -1,6 +1,7 @@
 package example
 
-case class Franc(val amount: Int) {
+case class Franc(private var amount: Int) {
 
   def times(multiplier: Int): Franc = Franc(this.amount * multiplier)
+
 }
