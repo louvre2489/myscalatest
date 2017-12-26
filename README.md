@@ -3,3 +3,7 @@
 -[ ] amountをprivateにする
 -[x] ~~Dollarの副作用どうする？~~
 -[ ] Moneyの丸めどうする？
+-[x] ~~equals()~~ 最初からcase classで実装していたため、労せずクリアしてしまった・・・
+-[ ] hashCode()
+-[ ] nullとの等価性比較
+-[ ] 他のオブジェクトとの等価性比較
