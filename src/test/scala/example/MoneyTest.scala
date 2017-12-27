@@ -47,4 +47,13 @@ class MoneyTest extends FlatSpec with Matchers {
     five.times(3) shouldEqual MyCurrency(15)
   }
 
+  "Some Currency Unit" should "be equal to same Currency Unit" in {
+
+    MyCurrencyUnit.USD shouldEqual
+      MyCurrency(1)(MyCurrency.DollarCurrency).currencyUnit
+
+    MyCurrencyUnit.CHF shouldEqual
+      MyCurrency(1)(MyCurrency.FrancCurrency).currencyUnit
+  }
+
 }
