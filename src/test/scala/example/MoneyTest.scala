@@ -7,7 +7,7 @@ class MoneyTest extends FlatSpec with Matchers {
   "$5 * N times" should "be $5 * N" in {
 
     // Dollar
-    implicit val myCurrency: MyCurrency = MyCurrency.DollarCurrency
+    implicit val myCurrency: MyCurrencyUnit = MyCurrencyUnit.USD
 
     val five: Money = MyCurrency(5)
     five.times(2) shouldEqual MyCurrency(10)
@@ -17,43 +17,35 @@ class MoneyTest extends FlatSpec with Matchers {
   "$N" should "be $N" in {
 
     // Dollar
-    implicit val myCurrency: MyCurrency = MyCurrency.DollarCurrency
-
-    MyCurrency(5) shouldEqual MyCurrency(5)
-    MyCurrency(5) should not be MyCurrency(6)
-  }
-
-  "N CHF" should "be N CHF" in {
-
-    // Franc
-    implicit val myCurrency: MyCurrency = MyCurrency.FrancCurrency
+    implicit val myCurrency: MyCurrencyUnit = MyCurrencyUnit.USD
 
     MyCurrency(5) shouldEqual MyCurrency(5)
     MyCurrency(5) should not be MyCurrency(6)
   }
 
   "$N" should "not be N CHF" in {
-    MyCurrency(5)(MyCurrency.FrancCurrency) should not be MyCurrency(5)(MyCurrency.DollarCurrency)
-  }
-
-  // testFrancMultiplicationに相当
-  "5 CHF * N times" should "be 5 CHF * N" in {
-
-    // Franc
-    implicit val myCurrency: MyCurrency = MyCurrency.FrancCurrency
-
-    val five: Money = MyCurrency(5)
-    five.times(2) shouldEqual MyCurrency(10)
-    five.times(3) shouldEqual MyCurrency(15)
+    MyCurrency(5)(MyCurrencyUnit.CHF) should not be
+      MyCurrency(5)(MyCurrencyUnit.USD)
   }
 
   "Some Currency Unit" should "be equal to same Currency Unit" in {
 
     MyCurrencyUnit.USD shouldEqual
-      MyCurrency(1)(MyCurrency.DollarCurrency).currencyUnit
+      MyCurrency(1)(MyCurrencyUnit.USD).currencyUnit
 
     MyCurrencyUnit.CHF shouldEqual
-      MyCurrency(1)(MyCurrency.FrancCurrency).currencyUnit
+      MyCurrency(1)(MyCurrencyUnit.CHF).currencyUnit
+  }
+
+  "Different objects with same amount " should "be equal" in {
+    MyCurrency(5)(MyCurrencyUnit.USD) shouldEqual
+      MyCurrency(5)(MyCurrencyUnit.USD)
+
+    MyCurrency(5)(MyCurrencyUnit.USD) should not be
+      MyCurrency(6)(MyCurrencyUnit.USD)
+
+    MyCurrency(5)(MyCurrencyUnit.CHF) should not be
+      MyCurrency(5)(MyCurrencyUnit.USD)
   }
 
 }
