@@ -1,17 +1,19 @@
 package example
 
-sealed trait Money {
+sealed abstract class Money {
   def times(multiplier: Int): Money
 }
 
 case class Dollar(private val amount: Int) extends Money {
 
-  override def times(multiplier: Int): Dollar = Dollar(this.amount * multiplier)
+  override def times(multiplier: Int): Money =
+    Dollar(this.amount * multiplier)
 
 }
 
 case class Franc(private val amount: Int) extends Money {
 
-  override def times(multiplier: Int): Franc = Franc(this.amount * multiplier)
+  override def times(multiplier: Int): Money =
+    Franc(this.amount * multiplier)
 
 }
