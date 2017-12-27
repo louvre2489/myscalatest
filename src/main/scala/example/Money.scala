@@ -2,25 +2,27 @@ package example
 
 sealed abstract class Money {
 
-  val currencyUnit: MyCurrencyUnit
+  implicit val currencyUnit: MyCurrencyUnit
 
-  def times(multiplier: Int): Money
-}
+  def moneyAmount: Int
 
-case class Dollar(private val amount: Int) extends Money {
-
-  val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.USD
-
-  override def times(multiplier: Int): Money =
-    Dollar(this.amount * multiplier)
+  def times(multiplier: Int): Money =
+    MyCurrency(this.moneyAmount * multiplier)
 
 }
 
-case class Franc(private val amount: Int) extends Money {
+case class Dollar(private val dollarAmount: Int) extends Money {
 
-  val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.CHF
+  override def moneyAmount: Int = dollarAmount
 
-  override def times(multiplier: Int): Money =
-    Franc(this.amount * multiplier)
+  implicit val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.USD
+
+}
+
+case class Franc(private val francAmount: Int) extends Money {
+
+  override def moneyAmount: Int = francAmount
+
+  implicit val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.CHF
 
 }
