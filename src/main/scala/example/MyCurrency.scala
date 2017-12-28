@@ -7,12 +7,23 @@ sealed trait MyCurrency
   */
 object MyCurrency {
 
+  /** 通貨単位の定義 **/
+  // Dollar
+  case object USD extends MyCurrency
+
+  // Franc
+  case object CHF extends MyCurrency
+
   /**
     * 通貨単位を元に通貨を生成する
+    *
+    * @param currencyUnit 通貨単位
+    * @param amount       金額
+    * @return 金額オブジェクト
     */
-  def apply(amount: Int)(implicit currencyUnit: MyCurrencyUnit): Money =
+  def apply(currencyUnit: MyCurrency)(amount: Int): Money =
     currencyUnit match {
-      case MyCurrencyUnit.USD => Dollar(amount)
-      case MyCurrencyUnit.CHF => Franc(amount)
+      case MyCurrency.USD => Dollar(amount)
+      case MyCurrency.CHF => Franc(amount)
     }
 }

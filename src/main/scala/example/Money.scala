@@ -2,27 +2,52 @@ package example
 
 sealed abstract class Money {
 
-  implicit val currencyUnit: MyCurrencyUnit
+  /**
+    * 通貨単位
+    */
+  val currencyUnit: MyCurrency
 
+  /**
+    * 継承先のクラスの通貨に応じた金額を設定する
+    *
+    * @return 金額
+    */
   def moneyAmount: Int
 
+  /**
+    * 金額をmultiplierで指定された数値倍して返す。
+    * オブジェクトは新たに生成し、既存オブジェクトに変更は加えない。
+    *
+    * @param multiplier 金額を掛け算するための数値
+    * @return 元の金額を指定倍した新たなオブジェクト
+    */
   def times(multiplier: Int): Money =
-    MyCurrency(this.moneyAmount * multiplier)
+    MyCurrency(currencyUnit)(this.moneyAmount * multiplier)
 
 }
 
+/**
+  * ドルクラス
+  *
+  * @param dollarAmount ドル単位での金額
+  */
 case class Dollar(private val dollarAmount: Int) extends Money {
 
   override def moneyAmount: Int = dollarAmount
 
-  implicit val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.USD
+  val currencyUnit: MyCurrency = MyCurrency.USD
 
 }
 
+/**
+  * フランクラス
+  *
+  * @param francAmount フラン単位での金額
+  */
 case class Franc(private val francAmount: Int) extends Money {
 
   override def moneyAmount: Int = francAmount
 
-  implicit val currencyUnit: MyCurrencyUnit = MyCurrencyUnit.CHF
+  val currencyUnit: MyCurrency = MyCurrency.CHF
 
 }
