@@ -24,8 +24,9 @@ sealed abstract class Money extends Expression {
   def times(multiplier: Int): Money =
     MyCurrency(currencyUnit)(this.moneyAmount * multiplier)
 
-  def plus(addend: Money): Expression =
-    MyCurrency(currencyUnit)(this.moneyAmount + addend.moneyAmount)
+  def plus(addend: Money): Expression = Sum(this, addend)
+
+  override def reduce(to: MyCurrency): Money = this
 
 }
 
