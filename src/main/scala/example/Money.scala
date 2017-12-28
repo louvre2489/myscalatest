@@ -1,6 +1,6 @@
 package example
 
-sealed abstract class Money {
+sealed abstract class Money extends Expression {
 
   /**
     * 通貨単位
@@ -23,6 +23,9 @@ sealed abstract class Money {
     */
   def times(multiplier: Int): Money =
     MyCurrency(currencyUnit)(this.moneyAmount * multiplier)
+
+  def plus(addend: Money): Expression =
+    MyCurrency(currencyUnit)(this.moneyAmount + addend.moneyAmount)
 
 }
 

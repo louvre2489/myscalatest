@@ -48,4 +48,15 @@ class MoneyTest extends FlatSpec with Matchers {
       MyCurrency(dollar)(5)
   }
 
+  "$5 + $5" should "be $10" in {
+
+    val five: Money = MyCurrency(dollar)(5)
+    val sum: Expression = five plus five
+    val bank: Bank = new Bank()
+
+    val reduced: Money = bank reduce(sum, MyCurrency.USD)
+    MyCurrency(dollar)(10) shouldEqual reduced
+
+  }
+
 }
