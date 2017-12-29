@@ -1,16 +1,58 @@
 package example
 
+/**
+  * 式をを表すクラスに実装するtrait
+  */
 trait Expression {
 
+  /**
+    * 足し算
+    *
+    * @param addend 足す数
+    * @return 和算式
+    */
+  def plus(addend: Expression): Expression
+
+  /**
+    * 簡約
+    *
+    * @param bank 換算情報
+    * @param to 変換先の通貨
+    * @return 通貨オブジェクト
+    */
   def reduce(bank: Bank, to: MyCurrency): Money
 
 }
 
-case class Sum(augend: Money, addend: Money) extends Expression {
+/**
+  * 和算式
+  *
+  * @param augend 足される数
+  * @param addend 足す数
+  */
+case class Sum(augend: Expression, addend: Expression) extends Expression {
 
+  /**
+    * 足し算
+    *
+    * @param addend 足す数
+    * @return 和算式
+    */
+  override def plus(addend: Expression): Expression = {
+    null
+  }
+
+  /**
+    * 簡約を実施する。
+    * 簡約の際、変換先の通貨にレート換算してから実施する。
+    *
+    * @param bank 換算情報
+    * @param to 変換先の通貨
+    * @return 通貨オブジェクト
+    */
   override def reduce(bank: Bank, to: MyCurrency): Money = {
 
-    val amount: Int = augend.moneyAmount + addend.moneyAmount
+    val amount: Int = augend.reduce(bank, to).moneyAmount + addend.reduce(bank, to).moneyAmount
     MyCurrency(to)(amount)
   }
 
@@ -21,12 +63,11 @@ case class Sum(augend: Money, addend: Money) extends Expression {
   */
 class Bank {
 
-  import scala.collection.mutable.{Map => MutableMap}
-  import scala.collection.mutable.{HashMap => MutableHashMap}
+  import collection.{mutable => m}
 
   // 為替レート
-  private val rates: MutableMap[(MyCurrency, MyCurrency), Int] =
-    MutableHashMap[(MyCurrency, MyCurrency), Int]()
+  private val rates: m.Map[(MyCurrency, MyCurrency), Int] =
+    m.HashMap[(MyCurrency, MyCurrency), Int]()
 
   /**
     * Expressionの簡約を実行する。

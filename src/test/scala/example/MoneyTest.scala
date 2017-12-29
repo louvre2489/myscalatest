@@ -44,7 +44,7 @@ class MoneyTest extends FlatSpec with Matchers {
     val bank: Bank = new Bank()
 
     val reduced: Money = bank reduce(sum, MyCurrency.USD)
-    MyCurrency(dollar)(10) shouldEqual reduced
+    reduced shouldEqual MyCurrency(dollar)(10)
   }
 
   "Result of Calculation" should "be Money Object" in {
@@ -63,7 +63,7 @@ class MoneyTest extends FlatSpec with Matchers {
     val bank = new Bank()
 
     val result: Money = bank.reduce(sum, MyCurrency.USD)
-    MyCurrency(dollar)(7) shouldEqual result
+    result shouldEqual MyCurrency(dollar)(7)
   }
 
   "Reduce only Money(1)" should "be Money(1)" in {
@@ -71,7 +71,7 @@ class MoneyTest extends FlatSpec with Matchers {
     val bank: Bank = new Bank()
     val result: Money = bank.reduce(MyCurrency(dollar)(1), MyCurrency.USD)
 
-    MyCurrency(dollar)(1) shouldEqual result
+    result shouldEqual MyCurrency(dollar)(1)
   }
 
   "Different Currency" can "be reduced" in {
@@ -80,13 +80,25 @@ class MoneyTest extends FlatSpec with Matchers {
     bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
     val result: Money = bank.reduce(MyCurrency(franc)(2), MyCurrency.USD)
 
-    MyCurrency(dollar)(1) shouldEqual result
+    result shouldEqual MyCurrency(dollar)(1)
 
   }
 
   "Rate of Same Currency" should "be 1" in {
     val bank: Bank = new Bank()
     bank.rate(MyCurrency.USD, MyCurrency.USD) shouldEqual 1
+  }
+
+  "Mixed currency addition" should "be able" in {
+
+    val fiveBucks: Expression = MyCurrency(dollar)(5)
+    val tenFrancs: Expression = MyCurrency(franc)(10)
+
+    val bank = new Bank()
+    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+
+    val result: Money = bank.reduce((fiveBucks plus tenFrancs), MyCurrency.USD)
+    result shouldEqual MyCurrency(dollar)(10)
   }
 
 }

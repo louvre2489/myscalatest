@@ -1,10 +1,11 @@
 package example
 
+/**
+  * 通貨クラス
+  */
 sealed abstract class Money extends Expression {
 
-  /**
-    * 通貨単位
-    */
+  //通貨単位
   val currencyUnit: MyCurrency
 
   /**
@@ -21,7 +22,7 @@ sealed abstract class Money extends Expression {
     * @param multiplier 金額を掛け算するための数値
     * @return 元の金額を指定倍した新たなオブジェクト
     */
-  def times(multiplier: Int): Money =
+  def times(multiplier: Int): Expression =
     MyCurrency(currencyUnit)(this.moneyAmount * multiplier)
 
   /**
@@ -30,7 +31,7 @@ sealed abstract class Money extends Expression {
     * @param addend 足す数
     * @return 足し算結果
     */
-  def plus(addend: Money): Expression =
+  override def plus(addend: Expression): Expression =
     Sum(this, addend)
 
   /**
@@ -39,10 +40,10 @@ sealed abstract class Money extends Expression {
     * 通貨が異なる場合はレート換算を行う。
     *
     * @param bank 換算情報を持ったBankのオブジェクト
-    * @param to toで指定された通貨へとレート換算し、Moneyオブジェクトを生成する
+    * @param to   toで指定された通貨へとレート換算し、Moneyオブジェクトを生成する
     * @return toで指定された通貨のMoneyオブジェクト
     */
-  override def reduce(bank: Bank,to: MyCurrency): Money = {
+  override def reduce(bank: Bank, to: MyCurrency): Money = {
 
     val rate: Int = bank.rate(this.currencyUnit, to)
     MyCurrency(to)(this.moneyAmount / rate)
