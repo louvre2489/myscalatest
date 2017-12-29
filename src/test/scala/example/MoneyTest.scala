@@ -81,7 +81,6 @@ class MoneyTest extends FlatSpec with Matchers {
     val result: Money = bank.reduce(MyCurrency(franc)(2), MyCurrency.USD)
 
     result shouldEqual MyCurrency(dollar)(1)
-
   }
 
   "Rate of Same Currency" should "be 1" in {
@@ -97,8 +96,34 @@ class MoneyTest extends FlatSpec with Matchers {
     val bank = new Bank()
     bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
 
-    val result: Money = bank.reduce((fiveBucks plus tenFrancs), MyCurrency.USD)
+    val result: Money = bank.reduce(fiveBucks plus tenFrancs, MyCurrency.USD)
     result shouldEqual MyCurrency(dollar)(10)
+  }
+
+  "Expression of sum" can "be added to another expression" in {
+
+    val fiveBucks: Expression = MyCurrency(dollar)(5)
+    val tenFrancs: Expression = MyCurrency(franc)(10)
+
+    val bank: Bank = new Bank()
+    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+    val sum: Expression = Sum(fiveBucks, tenFrancs) plus fiveBucks
+
+    val result: Money = bank.reduce(sum, MyCurrency.USD)
+    result shouldEqual MyCurrency(dollar)(15)
+  }
+
+  "Expression of sum" can "be multiplied" in {
+
+    val fiveBucks: Expression = MyCurrency(dollar)(5)
+    val tenFrancs: Expression = MyCurrency(franc)(10)
+
+    val bank: Bank = new Bank()
+    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+    val sum: Expression = Sum(fiveBucks, tenFrancs) times 2
+
+    val result: Money = bank.reduce(sum, MyCurrency.USD)
+    result shouldEqual MyCurrency(dollar)(20)
   }
 
 }

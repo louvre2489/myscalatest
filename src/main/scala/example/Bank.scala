@@ -6,6 +6,14 @@ package example
 trait Expression {
 
   /**
+    * 掛け算
+    *
+    * @param multiplier 掛ける数
+    * @return 乗算式
+    */
+  def times(multiplier: Int): Expression
+
+  /**
     * 足し算
     *
     * @param addend 足す数
@@ -32,15 +40,17 @@ trait Expression {
   */
 case class Sum(augend: Expression, addend: Expression) extends Expression {
 
+  override def times(multiplier: Int): Expression =
+    Sum(augend times multiplier, addend times multiplier)
+
   /**
     * 足し算
     *
     * @param addend 足す数
     * @return 和算式
     */
-  override def plus(addend: Expression): Expression = {
-    null
-  }
+  override def plus(addend: Expression): Expression =
+    Sum(this, addend)
 
   /**
     * 簡約を実施する。

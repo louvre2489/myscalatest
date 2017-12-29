@@ -8,11 +8,11 @@
 - [x] ~~$5 * 2 = $10~~
 - [x] ~~amountをprivateにする~~
 - [x] ~~Dollarの副作用どうする？~~
-- [ ] Moneyの丸めどうする？
-- [x] ~~equals()~~ 最初からcase classで実装していたため、労せずクリアしてしまった・・・
-- [ ] hashCode()
-- [ ] nullとの等価性比較
-- [ ] 他のオブジェクトとの等価性比較
+- [ ] ~~Moneyの丸めどうする？~~ 使用しなかった
+- [x] ~~equals()~~  最初からcase classで実装していたため、あまり気にする必要がなかった
+- [x] ~~hashCode()~~  最初からcase classで実装していたため、あまり気にする必要がなかった
+- [x] ~~nullとの等価性比較~~  最初からcase classで実装していたため、あまり気にする必要がなかった
+- [x] ~~他のオブジェクトとの等価性比較~~  最初からcase classで実装していたため、あまり気にする必要がなかった
 - [x] ~~5 CHF * 2 = 10 CHF~~
 - [x] ~~DollarとFrancの重複~~ Scalaにおいてはcase classでequalsを実装できるため、敢えて重複排除はしない
 - [x] ~~equalsの一般化~~
@@ -21,5 +21,7 @@
 - [x] ~~通貨の概念~~
 - [x] ~~testFrancMultiplicationを削除する？~~
 - [x] ~~$5 + $5 = $10~~
-- [ ] $5 + $5がMoneyを返す
+- [x] ~~$5 + $5がMoneyを返す~~
 - [x] ~~Bank.reduce(Money)~~
+- [x] ~~Sum.Plus~~
+- [x] ~~Expression.times~~
