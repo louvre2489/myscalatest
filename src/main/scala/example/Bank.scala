@@ -70,14 +70,16 @@ case class Sum(augend: Expression, addend: Expression) extends Expression {
 
 /**
   * 換算に関する情報を扱うクラス
+  * newによるインスタンス生成は不可
   */
-class Bank {
+class Bank private {
 
-  import collection.{mutable => m}
+  import collection.mutable.{Map => MutableMap}
+  import collection.mutable.{HashMap => MutableHashMap}
 
   // 為替レート
-  private val rates: m.Map[(MyCurrency, MyCurrency), Int] =
-    m.HashMap[(MyCurrency, MyCurrency), Int]()
+  private val rates: MutableMap[(MyCurrency, MyCurrency), Int] =
+    MutableHashMap[(MyCurrency, MyCurrency), Int]()
 
   /**
     * Expressionの簡約を実行する。
@@ -109,5 +111,19 @@ class Bank {
     */
   def rate(from: MyCurrency, to: MyCurrency): Int =
     if (from == to) 1 else rates((from, to))
+
+}
+
+/**
+  * Bankクラスのコンパニオンオブジェクト
+  */
+object Bank {
+
+  /**
+    * Bankクラスのインスタンスを初期化して生成する
+    *
+    * @return Bankクラスのインスタンス
+    */
+  def apply() = new Bank()
 
 }

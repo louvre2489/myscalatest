@@ -10,6 +10,17 @@ class MoneyTest extends FlatSpec with Matchers {
   // Franc
   val franc: MyCurrency = MyCurrency.CHF
 
+  /**
+    * $5と10CHF(ドルとフランのレートは1:2とする)を生成するFixture
+    */
+  trait FiveBucksAndTenFrancsCreator {
+    val fiveBucks: Expression = MyCurrency(dollar)(5)
+    val tenFrancs: Expression = MyCurrency(franc)(10)
+
+    val bank: Bank = Bank()
+    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+  }
+
   "$5 * N times" should "be $5 * N" in {
 
     val five: Money = MyCurrency(dollar)(5)
@@ -41,9 +52,8 @@ class MoneyTest extends FlatSpec with Matchers {
 
     val five: Money = MyCurrency(dollar)(5)
     val sum: Expression = five plus five
-    val bank: Bank = new Bank()
 
-    val reduced: Money = bank reduce(sum, MyCurrency.USD)
+    val reduced: Money = Bank() reduce(sum, MyCurrency.USD)
     reduced shouldEqual MyCurrency(dollar)(10)
   }
 
@@ -60,23 +70,22 @@ class MoneyTest extends FlatSpec with Matchers {
   "Reduce Money(3) and Money(4)" should "be Money(7)" in {
 
     val sum: Expression = Sum(MyCurrency(dollar)(3), MyCurrency(dollar)(4))
-    val bank = new Bank()
 
-    val result: Money = bank.reduce(sum, MyCurrency.USD)
+    val result: Money = Bank().reduce(sum, MyCurrency.USD)
     result shouldEqual MyCurrency(dollar)(7)
   }
 
   "Reduce only Money(1)" should "be Money(1)" in {
 
-    val bank: Bank = new Bank()
-    val result: Money = bank.reduce(MyCurrency(dollar)(1), MyCurrency.USD)
+    val result: Money = Bank().reduce(MyCurrency(dollar)(1), MyCurrency.USD)
 
     result shouldEqual MyCurrency(dollar)(1)
   }
 
   "Different Currency" can "be reduced" in {
 
-    val bank: Bank = new Bank()
+    val bank: Bank = Bank()
+
     bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
     val result: Money = bank.reduce(MyCurrency(franc)(2), MyCurrency.USD)
 
@@ -84,42 +93,25 @@ class MoneyTest extends FlatSpec with Matchers {
   }
 
   "Rate of Same Currency" should "be 1" in {
-    val bank: Bank = new Bank()
-    bank.rate(MyCurrency.USD, MyCurrency.USD) shouldEqual 1
+    Bank().rate(MyCurrency.USD, MyCurrency.USD) shouldEqual 1
   }
 
-  "Mixed currency addition" should "be able" in {
-
-    val fiveBucks: Expression = MyCurrency(dollar)(5)
-    val tenFrancs: Expression = MyCurrency(franc)(10)
-
-    val bank = new Bank()
-    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+  "Mixed currency addition" should "be able" in new FiveBucksAndTenFrancsCreator {
 
     val result: Money = bank.reduce(fiveBucks plus tenFrancs, MyCurrency.USD)
     result shouldEqual MyCurrency(dollar)(10)
   }
 
-  "Expression of sum" can "be added to another expression" in {
+  "Expression of sum" can "be added to another expression" in new FiveBucksAndTenFrancsCreator {
 
-    val fiveBucks: Expression = MyCurrency(dollar)(5)
-    val tenFrancs: Expression = MyCurrency(franc)(10)
-
-    val bank: Bank = new Bank()
-    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
     val sum: Expression = Sum(fiveBucks, tenFrancs) plus fiveBucks
 
     val result: Money = bank.reduce(sum, MyCurrency.USD)
     result shouldEqual MyCurrency(dollar)(15)
   }
 
-  "Expression of sum" can "be multiplied" in {
+  "Expression of sum" can "be multiplied" in new FiveBucksAndTenFrancsCreator {
 
-    val fiveBucks: Expression = MyCurrency(dollar)(5)
-    val tenFrancs: Expression = MyCurrency(franc)(10)
-
-    val bank: Bank = new Bank()
-    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
     val sum: Expression = Sum(fiveBucks, tenFrancs) times 2
 
     val result: Money = bank.reduce(sum, MyCurrency.USD)
