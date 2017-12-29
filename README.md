@@ -20,6 +20,6 @@
 - [x] ~~FrancとDollarを比較する~~
 - [x] ~~通貨の概念~~
 - [x] ~~testFrancMultiplicationを削除する？~~
-- [ ] $5 + $5 = $10
+- [x] ~~$5 + $5 = $10~~
 - [ ] $5 + $5がMoneyを返す
 - [x] ~~Bank.reduce(Money)~~

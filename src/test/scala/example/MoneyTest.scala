@@ -1,7 +1,5 @@
 package example
 
-import java.beans.Expression
-
 import org.scalatest._
 
 class MoneyTest extends FlatSpec with Matchers {
@@ -74,6 +72,21 @@ class MoneyTest extends FlatSpec with Matchers {
     val result: Money = bank.reduce(MyCurrency(dollar)(1), MyCurrency.USD)
 
     MyCurrency(dollar)(1) shouldEqual result
+  }
+
+  "Different Currency" can "be reduced" in {
+
+    val bank: Bank = new Bank()
+    bank.addRate(MyCurrency.CHF, MyCurrency.USD, 2)
+    val result: Money = bank.reduce(MyCurrency(franc)(2), MyCurrency.USD)
+
+    MyCurrency(dollar)(1) shouldEqual result
+
+  }
+
+  "Rate of Same Currency" should "be 1" in {
+    val bank: Bank = new Bank()
+    bank.rate(MyCurrency.USD, MyCurrency.USD) shouldEqual 1
   }
 
 }

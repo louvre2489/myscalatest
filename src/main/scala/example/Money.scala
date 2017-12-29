@@ -24,9 +24,30 @@ sealed abstract class Money extends Expression {
   def times(multiplier: Int): Money =
     MyCurrency(currencyUnit)(this.moneyAmount * multiplier)
 
-  def plus(addend: Money): Expression = Sum(this, addend)
+  /**
+    * 自オブジェクトと引数オブジェクトの金額を足し算する。
+    *
+    * @param addend 足す数
+    * @return 足し算結果
+    */
+  def plus(addend: Money): Expression =
+    Sum(this, addend)
 
-  override def reduce(to: MyCurrency): Money = this
+  /**
+    * 簡約を実施してMoneyオブジェクトを作成する。
+    * 簡約の際に、自オブジェクトと引数オブジェクトの通貨単位の違いを考慮し、
+    * 通貨が異なる場合はレート換算を行う。
+    *
+    * @param bank 換算情報を持ったBankのオブジェクト
+    * @param to toで指定された通貨へとレート換算し、Moneyオブジェクトを生成する
+    * @return toで指定された通貨のMoneyオブジェクト
+    */
+  override def reduce(bank: Bank,to: MyCurrency): Money = {
+
+    val rate: Int = bank.rate(this.currencyUnit, to)
+    MyCurrency(to)(this.moneyAmount / rate)
+
+  }
 
 }
 
