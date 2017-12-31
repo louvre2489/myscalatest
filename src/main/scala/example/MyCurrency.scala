@@ -1,5 +1,10 @@
 package example
 
+/**
+  * 通貨生成用のtrait
+  * MyCurrencyを実装したcase objectを通貨単位として列挙し、
+  * 通貨生成時のパターンとして使用する。
+  */
 sealed trait MyCurrency
 
 /**
@@ -7,11 +12,14 @@ sealed trait MyCurrency
   */
 object MyCurrency {
 
-  /** 通貨単位の定義 **/
-  // Dollar
+  /**
+    * 通貨単位：USDを示すシングルトンオブジェクト
+    */
   case object USD extends MyCurrency
 
-  // Franc
+  /**
+    * 通貨単位：CHFを示すシングルトンオブジェクト
+    */
   case object CHF extends MyCurrency
 
   /**

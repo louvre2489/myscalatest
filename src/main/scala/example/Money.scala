@@ -5,7 +5,9 @@ package example
   */
 sealed abstract class Money extends Expression {
 
-  //通貨単位
+  /**
+    * 通貨単位
+    */
   val currencyUnit: MyCurrency
 
   /**
@@ -59,9 +61,17 @@ sealed abstract class Money extends Expression {
   */
 case class Dollar(private val dollarAmount: Int) extends Money {
 
-  override def moneyAmount: Int = dollarAmount
-
+  /**
+    * 通貨単位：ドル
+    */
   val currencyUnit: MyCurrency = MyCurrency.USD
+
+  /**
+    * ドル換算された金額
+    *
+    * @return 金額
+    */
+  override def moneyAmount: Int = dollarAmount
 
 }
 
@@ -72,8 +82,16 @@ case class Dollar(private val dollarAmount: Int) extends Money {
   */
 case class Franc(private val francAmount: Int) extends Money {
 
-  override def moneyAmount: Int = francAmount
-
+  /**
+    * 通貨単位：フラン
+    */
   val currencyUnit: MyCurrency = MyCurrency.CHF
+
+  /**
+    * フラン換算された金額
+    *
+    * @return 金額
+    */
+  override def moneyAmount: Int = francAmount
 
 }
