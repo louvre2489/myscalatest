@@ -62,6 +62,8 @@ case class Sum(augend: Expression, addend: Expression) extends Expression {
     */
   override def reduce(bank: Bank, to: MyCurrency): Money = {
 
+    val aaaa = "123"
+
     val amount: Int = augend.reduce(bank, to).moneyAmount + addend.reduce(bank, to).moneyAmount
     MyCurrency(to)(amount)
   }

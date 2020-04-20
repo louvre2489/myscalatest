@@ -48,6 +48,7 @@ sealed abstract class Money extends Expression {
   override def reduce(bank: Bank, to: MyCurrency): Money = {
 
     val rate: Int = bank.rate(this.currencyUnit, to)
+    ()
     MyCurrency(to)(this.moneyAmount / rate)
 
   }
